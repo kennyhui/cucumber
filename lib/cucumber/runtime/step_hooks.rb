@@ -1,8 +1,8 @@
 module Cucumber
   class Runtime
     class StepHooks
-      def initialize(after)
-        @after = after
+      def initialize(hooks_data)
+        @hooks_data = hooks_data
       end
 
       def apply(test_steps)
@@ -13,8 +13,8 @@ module Cucumber
 
       private
       def after_step_hooks(test_step)
-        @after.map do |action_block|
-          Hooks.after_step_hook(test_step.source, &action_block)
+        @hooks_data.map do |hook_data|
+          Hooks.after_step_hook(test_step.source, hook_data[:location], &hook_data[:action_block])
         end
       end
     end

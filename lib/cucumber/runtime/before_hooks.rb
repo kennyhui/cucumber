@@ -1,8 +1,8 @@
 module Cucumber
   class Runtime
     class BeforeHooks
-      def initialize(action_blocks)
-        @action_blocks = action_blocks
+      def initialize(hooks_data)
+        @hooks_data = hooks_data
       end
 
       def apply_to(test_case)
@@ -14,8 +14,8 @@ module Cucumber
       private
 
       def before_hooks(source)
-        @action_blocks.map do |action_block|
-          Hooks.before_hook(source, &action_block)
+        @hooks_data.map do |hook_data|
+          Hooks.before_hook(source, hook_data[:location], &hook_data[:action_block])
         end
       end
     end

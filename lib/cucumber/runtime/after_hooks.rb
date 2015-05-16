@@ -1,8 +1,8 @@
 module Cucumber
   class Runtime
     class AfterHooks
-      def initialize(action_blocks)
-        @action_blocks = action_blocks
+      def initialize(hooks_data)
+        @hooks_data = hooks_data
       end
 
       def apply_to(test_case)
@@ -14,11 +14,10 @@ module Cucumber
       private
 
       def after_hooks(source)
-        @action_blocks.map do |action_block|
-          Hooks.after_hook(source, &action_block)
+        @hooks_data.map do |hook_data|
+          Hooks.after_hook(source, hook_data[:location], &hook_data[:action_block])
         end
       end
     end
   end
 end
-
